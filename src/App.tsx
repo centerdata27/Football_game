@@ -1,35 +1,26 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import type { Score, Team } from './types';
+import Scoreboard from "./components/Scoreboard";
+import Controls from "./components/Controls";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [score, setScore] = useState<Score>({HOME:0, AWAY: 0});
+  const [possession, setPossession] = useState<Team>("HOME");
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  const handleScore = (team: Team, pts: number) =>
+      setScore((s) => ({...s, [team]: s[team] + pts}));
+
+  const toggle = () =>
+      setPossession((p) => (p === "HOME" ? "AWAY" : "HOME"));
+
+    return (
+      <main className="min-h-screen flex flex-col items-center p-6 bg-slate-100">
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">
+          Football Game - Feature 1
+        </h1>
+        <Scoreboard score={score} possession={possession} />
+        <Controls onScore={handleScore} onToggle={toggle} />
+      </main>
+    )
+
 }
-
-export default App
